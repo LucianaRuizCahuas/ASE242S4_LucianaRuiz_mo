@@ -24,4 +24,4 @@ StyleSheet – Utilizado para el diseño visual y la organización de los estilo
 JavaScript / React – Lenguaje y librería utilizados para la lógica de la aplicación.
 
 npx expo start
-npm install realm
+npm install realmm
