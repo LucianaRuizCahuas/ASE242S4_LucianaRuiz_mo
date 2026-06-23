@@ -13,6 +13,7 @@ import {
 
 import { useFocusEffect } from "expo-router";
 
+import { getApiErrorMessage } from "../service/apiConfig";
 import {
   createCustomer,
   deleteCustomer,
@@ -96,9 +97,12 @@ export default function CustomersScreen() {
     try {
       const data = await getCustomers(!showDeleted);
       setCustomers(data);
-    } catch (error) {
+    } catch (error: any) {
       console.log("ERROR AL CARGAR CLIENTES:", error);
-      showMessage("Error", "No se pudieron cargar los clientes");
+      showMessage(
+        "Error",
+        getApiErrorMessage(error, "No se pudieron cargar los clientes"),
+      );
     }
   }, [showDeleted]);
 

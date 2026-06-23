@@ -21,6 +21,7 @@ import {
   restoreTour,
   updateTour,
 } from "../service/tourApi";
+import { getApiErrorMessage } from "../service/apiConfig";
 
 type Coordinates = {
   latitude: number;
@@ -147,6 +148,7 @@ export default function ToursScreen() {
     endDate: "",
     ubigeoCode: "",
     driverId: "",
+    availableSeats: "",
   });
 
   const getId = (item: any) => item.id || item._id;
@@ -188,8 +190,11 @@ export default function ToursScreen() {
     try {
       const data = await getTours(showDeleted ? "I" : "A");
       setTours(data);
-    } catch {
-      showMessage("Error", "No se pudieron cargar los tours");
+    } catch (error: any) {
+      showMessage(
+        "Error",
+        getApiErrorMessage(error, "No se pudieron cargar los tours"),
+      );
     }
   }, [showDeleted]);
 
@@ -209,6 +214,7 @@ export default function ToursScreen() {
       endDate: "",
       ubigeoCode: "",
       driverId: "",
+      availableSeats: "",
     });
   };
 
@@ -250,6 +256,15 @@ export default function ToursScreen() {
       return false;
     }
 
+    if (
+      !form.availableSeats.trim() ||
+      !Number.isInteger(Number(form.availableSeats)) ||
+      Number(form.availableSeats) < 0
+    ) {
+      showMessage("Validacion", "Ingresa los cupos disponibles como numero entero");
+      return false;
+    }
+
     return true;
   };
 
@@ -265,6 +280,7 @@ export default function ToursScreen() {
         endDate: form.endDate.trim(),
         ubigeoCode: form.ubigeoCode.trim(),
         driverId: Number(form.driverId),
+        availableSeats: Number(form.availableSeats),
         state: "A",
       };
 
@@ -293,6 +309,7 @@ export default function ToursScreen() {
       endDate: item.endDate || "",
       ubigeoCode: item.ubigeoCode || "",
       driverId: String(item.driverId || ""),
+      availableSeats: String(item.availableSeats ?? item.stock ?? ""),
     });
   };
 
@@ -421,6 +438,16 @@ export default function ToursScreen() {
             onChangeText={(v) => setForm({ ...form, driverId: v })}
           />
 
+          <TextInput
+            style={styles.input}
+            placeholder="Cupos disponibles"
+            keyboardType="numeric"
+            value={form.availableSeats}
+            onChangeText={(v) =>
+              setForm({ ...form, availableSeats: v.replace(/[^0-9]/g, "") })
+            }
+          />
+
           <TouchableOpacity style={styles.button} onPress={saveTour}>
             <Text style={styles.buttonText}>
               {editingId ? "Actualizar tour" : "Registrar tour"}
@@ -465,6 +492,7 @@ export default function ToursScreen() {
               <Text>Fin: {String(item.endDate)}</Text>
               <Text>Ubigeo: {item.ubigeoCode}</Text>
               <Text>Driver ID: {item.driverId}</Text>
+              <Text>Cupos: {String(item.availableSeats ?? item.stock ?? "N/D")}</Text>
               <Text>Estado: {item.state}</Text>
               <Text style={styles.price}>S/ {String(item.price)}</Text>
 

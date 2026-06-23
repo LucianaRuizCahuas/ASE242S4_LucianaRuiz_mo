@@ -21,11 +21,31 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
+        name="login"
+        options={{
+          title: "Login",
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="log-in" size={22} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
         name="tours"
         options={{
           title: "Tours",
           tabBarIcon: ({ color }) => (
             <Ionicons name="map" size={22} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="reservations"
+        options={{
+          title: "Reservas",
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="receipt" size={22} color={color} />
           ),
         }}
       />

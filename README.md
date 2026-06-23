@@ -1,27 +1,58 @@
-# Sistema de Ventas Móvil
+# Angoma Tours Movil
 
-## Descripción de la aplicación
+Aplicacion movil desarrollada con React Native y Expo para gestionar paquetes turisticos, clientes y reservas conectadas a un backend propio.
 
-El Sistema de Ventas Móvil es la versión adaptada de un sistema web de gestión de ventas para dispositivos móviles.
-Esta aplicación busca facilitar la administración de productos, pedidos y clientes desde un smartphone, permitiendo a los usuarios acceder rápidamente a las funciones principales del sistema.
+## Criterios cubiertos
 
-La app está diseñada para ofrecer una interfaz sencilla, organizada y fácil de usar, permitiendo que los usuarios puedan ingresar al sistema, visualizar información de ventas y gestionar pedidos de forma eficiente desde cualquier lugar.
+- Login funcional con validacion de usuario y clave. Usa `/auth/login` del backend y mantiene una credencial demo `admin / 1234` para exposicion.
+- CRUD maestro de clientes: registro, listado activo/eliminado, edicion, eliminacion logica, restauracion, busqueda y validaciones.
+- CRUD maestro de tours: registro, listado activo/eliminado, edicion, eliminacion logica, restauracion, geolocalizacion, ruta en Maps y cupos disponibles.
+- Tabla transaccional de reservas: enlaza cliente + tour, calcula total, valida cupos y envia la reserva al backend.
+- Funcionalidad avanzada: GPS, rutas en Google Maps, busqueda inteligente e historial de consultas.
 
-Su objetivo principal es mejorar la accesibilidad y rapidez en la gestión de ventas, adaptando las funcionalidades principales del sistema web a un entorno móvil.
+## Backend
 
-## Captura de la pantalla creada
+La URL base se configura en `app/service/apiConfig.ts`.
 
-![pantalla-inicio.png](pantalla-inicio.png)
+Por defecto:
 
-## Tecnologías Utilizadas
+```bash
+http://192.168.1.53:8086/v1/api
+```
 
-React Native – Framework para el desarrollo de aplicaciones móviles multiplataforma.
+Tambien puedes cambiarla sin tocar codigo:
 
-Expo – Herramienta que facilita el desarrollo y ejecución de aplicaciones React Native.
+```bash
+EXPO_PUBLIC_API_URL=http://TU-IP:8086/v1/api npx expo start
+```
 
-StyleSheet – Utilizado para el diseño visual y la organización de los estilos de la interfaz.
+## Endpoints esperados
 
-JavaScript / React – Lenguaje y librería utilizados para la lógica de la aplicación.
+- `POST /auth/login`
+- `GET /customer/state/{true|false}`
+- `POST /customer`
+- `PUT /customer/{id}`
+- `PATCH /customer/delete/{id}`
+- `PATCH /customer/restore/{id}`
+- `GET /tour-packages/state/{A|I}`
+- `POST /tour-packages`
+- `PUT /tour-packages/{id}`
+- `PATCH /tour-packages/delete/{id}`
+- `PATCH /tour-packages/restore/{id}`
+- `GET /reservations/state/{A|I}`
+- `POST /reservations`
+- `PATCH /reservations/delete/{id}`
+- `PATCH /reservations/restore/{id}`
 
+## Ejecutar
+
+```bash
+npm install
 npx expo start
-npm install realmm
+```
+
+Para web:
+
+```bash
+npx expo start --web --port 8081
+```
